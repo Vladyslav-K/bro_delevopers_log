@@ -1,0 +1,62 @@
+import React, { forwardRef } from 'react'
+import styled from 'styled-components'
+import { FieldError } from 'react-hook-form'
+
+interface InputProps {
+  label: string
+  name: string
+  placeholder: string
+  error: FieldError | undefined
+  ref: ((instance: HTMLInputElement | null) => void) | React.RefObject<HTMLInputElement> | null | undefined
+}
+
+const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
+  const { label, name, placeholder, error } = props
+
+  return (
+    <InputContainer>
+      <LabelContainer>
+        <StyledLabel htmlFor={name}>{label}</StyledLabel>
+        {error && <RequiredSpan>Required</RequiredSpan>}
+      </LabelContainer>
+
+      <StyledInput id={name} name={name} type="text" placeholder={placeholder} ref={ref} error={error} />
+    </InputContainer>
+  )
+})
+
+export default Input
+
+const InputContainer = styled.div`
+  margin: 20px;
+`
+
+const StyledInput = styled.input<{ error: FieldError | undefined }>`
+  min-width: 400px;
+
+  padding: 15px;
+
+  border: ${props => (props.error ? '1px solid red' : '1px solid #a598b9')};
+  border-radius: 10px;
+  outline: none;
+
+  font-size: 16px;
+
+  &:focus {
+    border-color: blue;
+  }
+`
+const StyledLabel = styled.label`
+  font-size: 18px;
+`
+
+const LabelContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 10px;
+`
+const RequiredSpan = styled.span`
+  color: red;
+`
