@@ -28,6 +28,7 @@ const Container = styled.div`
 
   width: 100%;
 
+  margin-top: 25%;
   padding: 80px;
 
   border: 2px solid #a598b9;

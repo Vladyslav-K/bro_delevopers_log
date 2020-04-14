@@ -17,17 +17,17 @@ type FormData = {
 
 const ErrorPage: SFC = () => {
   const { register, handleSubmit, errors } = useForm<FormData>()
-  const onSubmit = handleSubmit(props => {
+  const onSubmit = handleSubmit((props) => {
     console.log(props)
   })
 
   return (
-    <Wrapper>
+    <StyledWrapper>
       <StyledForm onSubmit={onSubmit}>
         <Input
           name="error_heading"
           label="Brief description of the error"
-          placeholder="Enter here a brief description of the error"
+          placeholder="npm installation does not work"
           ref={register({ required: true })}
           error={errors.error_heading}
         />
@@ -35,7 +35,7 @@ const ErrorPage: SFC = () => {
         <TextArea
           name="error_description"
           label="Detailed description of the error"
-          placeholder="Enter here a detailed description of the error"
+          placeholder="Errors when entering the npm install command"
           ref={register({ required: true })}
           error={errors.error_description}
         />
@@ -43,9 +43,16 @@ const ErrorPage: SFC = () => {
         <TextArea
           name="error_solution"
           label="Error solution"
-          placeholder="Enter the solution here"
+          placeholder="Update npm to the latest version"
           ref={register({ required: true })}
           error={errors.error_solution}
+        />
+
+        <TextArea
+          name="error_code"
+          label="Code with a problem and solution (optional)"
+          placeholder="sudo npm install -g npm"
+          ref={register({ required: false })}
         />
 
         <ButtonsContainer>
@@ -53,13 +60,17 @@ const ErrorPage: SFC = () => {
           <SubmitButton />
         </ButtonsContainer>
       </StyledForm>
-    </Wrapper>
+    </StyledWrapper>
   )
 }
 
+const StyledWrapper = styled(Wrapper)`
+  padding: 30px 0;
+`
+
 const ButtonsContainer = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
 
   width: 100%;
 `

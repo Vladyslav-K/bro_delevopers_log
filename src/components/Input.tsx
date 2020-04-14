@@ -28,15 +28,18 @@ const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
 export default Input
 
 const InputContainer = styled.div`
-  margin: 20px;
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+
+  margin: 20px 0;
 `
 
 const StyledInput = styled.input<{ error: FieldError | undefined }>`
-  min-width: 400px;
-
   padding: 15px;
 
-  border: ${props => (props.error ? '1px solid red' : '1px solid #a598b9')};
+  border: ${(props) => (props.error ? '2px solid red' : '2px solid #a598b9')};
   border-radius: 10px;
   outline: none;
 

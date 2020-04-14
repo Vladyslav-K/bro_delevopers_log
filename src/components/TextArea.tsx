@@ -6,7 +6,7 @@ interface TextAreaProps {
   label: string
   name: string
   placeholder: string
-  error: FieldError | undefined
+  error?: FieldError | undefined
   ref: ((instance: HTMLTextAreaElement | null) => void) | React.RefObject<HTMLTextAreaElement> | null | undefined
 }
 
@@ -20,7 +20,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>((props, ref) => 
         {error && <RequiredSpan>Required</RequiredSpan>}
       </LabelContainer>
 
-      <StyledTextArea cols={40} rows={5} id={name} name={name} placeholder={placeholder} ref={ref} error={error} />
+      <StyledTextArea cols={40} rows={3} id={name} name={name} placeholder={placeholder} ref={ref} error={error} />
     </TextAreaContainer>
   )
 })
@@ -28,17 +28,17 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>((props, ref) => 
 export default TextArea
 
 const TextAreaContainer = styled.div`
-  margin: 20px;
+  margin: 10px 0;
 `
 
 const StyledTextArea = styled.textarea<{ error: FieldError | undefined }>`
   max-width: 1440px;
-  min-width: 400px;
-  min-height: 90px;
+  min-width: 450px;
+  min-height: 57px;
 
   padding: 15px;
 
-  border: ${props => (props.error ? '1px solid red' : '1px solid #a598b9')};
+  border: ${(props) => (props.error ? '2px solid red' : '2px solid #a598b9')};
   border-radius: 10px;
   outline: none;
 

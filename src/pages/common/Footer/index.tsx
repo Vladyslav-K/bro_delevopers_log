@@ -23,6 +23,7 @@ const FooterContent = styled.div`
 
 const StyledFooter = styled.footer`
   display: flex;
+  flex: 0 0 auto;
   position: static;
   align-items: center;
   justify-content: center;

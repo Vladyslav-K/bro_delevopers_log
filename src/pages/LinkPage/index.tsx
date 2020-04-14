@@ -16,12 +16,12 @@ type FormData = {
 
 const LinkPage: SFC = () => {
   const { register, handleSubmit, errors } = useForm<FormData>()
-  const onSubmit = handleSubmit(props => {
+  const onSubmit = handleSubmit((props) => {
     console.log(props)
   })
 
   return (
-    <Wrapper>
+    <StyledWrapper>
       <StyledForm onSubmit={onSubmit}>
         <Input
           name="link_path"
@@ -44,13 +44,17 @@ const LinkPage: SFC = () => {
           <SubmitButton />
         </ButtonsContainer>
       </StyledForm>
-    </Wrapper>
+    </StyledWrapper>
   )
 }
 
+const StyledWrapper = styled(Wrapper)`
+  margin-top: 25%;
+`
+
 const ButtonsContainer = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
 
   width: 100%;
 `

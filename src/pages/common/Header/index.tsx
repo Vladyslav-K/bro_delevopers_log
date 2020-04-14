@@ -1,4 +1,4 @@
-import React, { SFC } from 'react'
+import React, { SFC, memo } from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -13,7 +13,7 @@ const Header: SFC = () => {
         </LogoLink>
 
         <StyledAppBar>
-          <Link to="/">Problem solutions</Link>
+          <Link to="/problems">Problem solutions</Link>
           <Link to="/">Error solutions</Link>
           <Link to="/">Useful links</Link>
         </StyledAppBar>
@@ -37,7 +37,7 @@ const StyledHeader = styled.header`
   justify-content: center;
 
   width: 100%;
-  height: 100px;
+  height: 80px;
 
   background-color: #625772;
 
@@ -45,7 +45,7 @@ const StyledHeader = styled.header`
 `
 
 const StyledImg = styled.img`
-  width: 90px;
+  width: 80px;
 `
 
 const LogoLink = styled(Link)`
@@ -69,4 +69,4 @@ const StyledAppBar = styled.div`
   }
 `
 
-export default Header
+export default memo(Header)

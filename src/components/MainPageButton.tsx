@@ -4,9 +4,9 @@ import styled from 'styled-components'
 
 const MainPageButton: SFC = () => {
   return (
-    <StyledButton type="button">
-      <StyledLink to="/">Go home</StyledLink>
-    </StyledButton>
+    <StyledLink to="/">
+      <StyledButton type="button">Go home</StyledButton>
+    </StyledLink>
   )
 }
 
