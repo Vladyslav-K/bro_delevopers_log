@@ -40,8 +40,12 @@ const problems = createSlice({
       state.pending = false
     })
 
+    builder.addCase(getCurrentProblemFromDB.pending, (state, { payload }) => {
+      state.pending = true
+    })
     builder.addCase(getCurrentProblemFromDB.fulfilled, (state, { payload }) => {
       state.currentProblem = payload
+      state.pending = false
     })
   },
 })

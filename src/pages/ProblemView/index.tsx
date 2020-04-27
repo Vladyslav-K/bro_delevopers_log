@@ -5,43 +5,49 @@ import SyntaxHighlighter from 'react-syntax-highlighter'
 import { androidstudio } from 'react-syntax-highlighter/dist/esm/styles/hljs'
 import styled from 'styled-components'
 
+// get current problem action
 import { getCurrentProblemFromDB } from '../../utils/Api'
+
+// problem interface
 import { IProblem } from '../../store/problemsModule'
 
+// styled spinner component
 import Spinner from '../../components/Spinner'
 
 interface IProblemView extends RouteComponentProps<{ id: string }> {
   currentProblem: IProblem
+  pending: boolean
 }
 
-const ProblemView: FC<IProblemView> = ({ match, currentProblem }) => {
+const ProblemView: FC<IProblemView> = ({ match, currentProblem, pending }) => {
   const dispatch = useDispatch()
   const { problem_heading, problem_description, problem_solution, problem_code } = currentProblem
 
   useEffect(() => {
     dispatch(getCurrentProblemFromDB(match.params.id))
-
     // eslint-disable-next-line
   }, [])
 
-  if (!currentProblem.id) {
-    return <Spinner />
-  }
-
   return (
     <Container>
-      <Heading>Problem: {problem_heading} </Heading>
-
-      <StyledSpan>Description: {problem_description} </StyledSpan>
-
-      <StyledSpan>Solution: {problem_solution} </StyledSpan>
-
-      {problem_code && (
+      {pending ? (
+        <Spinner />
+      ) : (
         <>
-          <StyledSpan>Code:</StyledSpan>
-          <StyledSyntaxHighlighter showLineNumbers style={androidstudio}>
-            {problem_code}
-          </StyledSyntaxHighlighter>
+          <Heading>Problem: {problem_heading} </Heading>
+
+          <StyledSpan>Description: {problem_description} </StyledSpan>
+
+          <StyledSpan>Solution: {problem_solution} </StyledSpan>
+
+          {problem_code && (
+            <>
+              <StyledSpan>Code:</StyledSpan>
+              <StyledSyntaxHighlighter showLineNumbers style={androidstudio}>
+                {problem_code}
+              </StyledSyntaxHighlighter>
+            </>
+          )}
         </>
       )}
     </Container>
@@ -53,9 +59,9 @@ const Container = styled.div`
   flex-direction: column;
 
   min-height: calc(100vh - 110px);
+  min-width: 1000px;
 
-  margin: 15px;
-  padding: 10px;
+  padding: 0 25px;
 
   line-height: 30px;
   font-size: 20px;
@@ -81,12 +87,11 @@ const StyledSyntaxHighlighter = styled(SyntaxHighlighter)`
 interface IState {
   problems: {
     currentProblem: IProblem
+    pending: boolean
   }
 }
 
-export default connect(
-  (state: IState) => ({
-    currentProblem: state.problems.currentProblem,
-  }),
-  null,
-)(ProblemView)
+export default connect((state: IState) => ({
+  currentProblem: state.problems.currentProblem,
+  pending: state.problems.pending,
+}))(ProblemView)
