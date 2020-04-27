@@ -7,7 +7,7 @@ import createStore from './store'
 import history from './utils/history'
 
 import './index.css'
-import App from './pages'
+import App from './routes'
 
 const store = createStore()
 

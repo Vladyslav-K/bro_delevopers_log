@@ -10,9 +10,11 @@ const rotate = keyframes`
 `
 
 const Spinner = styled.div`
-  margin: 60px auto;
+  margin: -5em 0 0 -5em;
   font-size: 10px;
-  position: relative;
+  position: absolute;
+  top: 50%;
+  left: 50%;
   text-indent: -9999em;
   border-top: 1.1em solid rgba(98, 87, 114, 0.2);
   border-right: 1.1em solid rgba(98, 87, 114, 0.2);

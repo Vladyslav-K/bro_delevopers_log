@@ -12,17 +12,17 @@ export interface IProblem {
 }
 
 interface InitialStateProps {
-  problemList: IProblem[] | []
+  problemList: IProblem[] | [] | undefined
   currentProblem: IProblem | {}
+  allProblemsLength: number
   pending: boolean
-  error: boolean
 }
 
 const initialState: InitialStateProps = {
   problemList: [],
   currentProblem: {},
+  allProblemsLength: 0,
   pending: false,
-  error: false,
 }
 
 const problems = createSlice({
@@ -32,33 +32,16 @@ const problems = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getProblemsFromDB.pending, (state) => {
       state.pending = true
-      state.error = false
-    })
-    builder.addCase(getProblemsFromDB.rejected, (state) => {
-      state.pending = false
-      state.error = true
     })
     builder.addCase(getProblemsFromDB.fulfilled, (state, { payload }) => {
-      if (payload !== null) {
-        state.problemList = payload
-        state.pending = false
-        state.error = false
-      }
-    })
-    builder.addCase(getCurrentProblemFromDB.pending, (state) => {
-      state.pending = true
-      state.error = false
-    })
-    builder.addCase(getCurrentProblemFromDB.rejected, (state) => {
+      const { problems, allProblemsLength } = payload
+      state.allProblemsLength = allProblemsLength
+      state.problemList = problems
       state.pending = false
-      state.error = true
     })
+
     builder.addCase(getCurrentProblemFromDB.fulfilled, (state, { payload }) => {
-      if (payload !== null) {
-        state.currentProblem = payload
-        state.pending = false
-        state.error = false
-      }
+      state.currentProblem = payload
     })
   },
 })
