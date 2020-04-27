@@ -10,23 +10,21 @@ import { IProblem } from '../../store/problemsModule'
 
 import Spinner from '../../components/Spinner'
 
-type IDType = { id: string }
-
-interface IProblemView extends RouteComponentProps<IDType> {
+interface IProblemView extends RouteComponentProps<{ id: string }> {
   currentProblem: IProblem
-  pending: boolean
 }
 
-const ProblemView: FC<IProblemView> = ({ match, currentProblem, pending }) => {
+const ProblemView: FC<IProblemView> = ({ match, currentProblem }) => {
   const dispatch = useDispatch()
   const { problem_heading, problem_description, problem_solution, problem_code } = currentProblem
 
   useEffect(() => {
     dispatch(getCurrentProblemFromDB(match.params.id))
+
     // eslint-disable-next-line
   }, [])
 
-  if (pending) {
+  if (!currentProblem.id) {
     return <Spinner />
   }
 
@@ -54,24 +52,22 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
 
+  min-height: calc(100vh - 110px);
+
   margin: 15px;
   padding: 10px;
 
-  border: 2px solid #a598b9;
-  border-radius: 10px;
-
   line-height: 30px;
-  font-size: 25px;
-  color: #625772;
+  font-size: 20px;
 `
 
 const Heading = styled.span`
-  font-size: 35px;
-  margin: 20px 0;
+  font-size: 25px;
+  margin: 40px 0 10px 0;
 `
 
 const StyledSpan = styled.span`
-  margin: 20px 0;
+  margin: 10px 0;
 `
 
 const StyledSyntaxHighlighter = styled(SyntaxHighlighter)`
@@ -79,20 +75,18 @@ const StyledSyntaxHighlighter = styled(SyntaxHighlighter)`
 
   padding: 20px !important;
 
-  font-size: 18px;
+  font-size: 16px;
 `
 
 interface IState {
   problems: {
     currentProblem: IProblem
-    pending: boolean
   }
 }
 
 export default connect(
   (state: IState) => ({
     currentProblem: state.problems.currentProblem,
-    pending: state.problems.pending,
   }),
   null,
 )(ProblemView)

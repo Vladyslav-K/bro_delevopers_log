@@ -20,7 +20,9 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>((props, ref) => 
         {error && <RequiredSpan>Required</RequiredSpan>}
       </LabelContainer>
 
-      <StyledTextArea cols={40} rows={3} id={name} name={name} placeholder={placeholder} ref={ref} error={error} />
+      <TextContainer>
+        <StyledTextArea cols={40} rows={3} id={name} name={name} placeholder={placeholder} ref={ref} error={error} />
+      </TextContainer>
     </TextAreaContainer>
   )
 })
@@ -28,17 +30,23 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>((props, ref) => 
 export default TextArea
 
 const TextAreaContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  width: 80%;
+
   margin: 10px 0;
 `
 
 const StyledTextArea = styled.textarea<{ error: FieldError | undefined }>`
-  max-width: 1440px;
+  max-width: 100%;
   min-width: 450px;
-  min-height: 57px;
+  min-height: 60px;
+  width: 100%;
 
   padding: 15px;
 
-  border: ${(props) => (props.error ? '2px solid red' : '2px solid #a598b9')};
+  border: ${(props) => (props.error ? '2px solid red' : '2px solid #444')};
   border-radius: 10px;
   outline: none;
 
@@ -61,4 +69,7 @@ const LabelContainer = styled.div`
 `
 const RequiredSpan = styled.span`
   color: red;
+`
+const TextContainer = styled.div`
+  display: flex;
 `

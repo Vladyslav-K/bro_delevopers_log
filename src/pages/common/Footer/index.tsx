@@ -13,14 +13,6 @@ const Footer: SFC = () => {
   )
 }
 
-const FooterContent = styled.div`
-  display: flex;
-  justify-content: center;
-
-  max-width: 1440px;
-  width: 100%;
-`
-
 const StyledFooter = styled.footer`
   display: flex;
   flex: 0 0 auto;
@@ -29,12 +21,22 @@ const StyledFooter = styled.footer`
   justify-content: center;
 
   width: 100%;
-  height: 50px;
+  height: 40px;
 
   color: white;
-  background-color: #625772;
+  background-color: #444;
 
   transform: translateZ(0);
+
+  user-select: none;
+`
+
+const FooterContent = styled.div`
+  display: flex;
+  justify-content: center;
+
+  max-width: 1440px;
+  width: 100%;
 `
 
 const SmallText = styled.span`

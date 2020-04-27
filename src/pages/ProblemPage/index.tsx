@@ -1,19 +1,22 @@
 import React, { SFC, memo } from 'react'
-import styled from 'styled-components'
-import { compose } from 'redux'
-import { connect } from 'react-redux'
 import { useForm } from 'react-hook-form'
+import { connect } from 'react-redux'
+import { compose } from 'redux'
 
+// add problem action
 import { addProblem } from '../../utils/Api'
 
+// problem intefrace
 import { IProblem } from '../../store/problemsModule'
 
 // styled components
 import Input from '../../components/Input'
 import Wrapper from '../../layouts/Wrapper'
+import StyledForm from '../../layouts/Form'
 import TextArea from '../../components/TextArea'
 import SubmitButton from '../../components/SubmitButton'
 import MainPageButton from '../../components/MainPageButton'
+import ButtonsContainer from '../../layouts/ButtonsContainer'
 
 interface IProblemPage {
   addProblem: (data: IProblem) => void
@@ -29,7 +32,7 @@ const ProblemPage: SFC<IProblemPage> = ({ addProblem }) => {
   })
 
   return (
-    <StyledWrapper>
+    <Wrapper>
       <StyledForm onSubmit={onSubmit}>
         <Input
           name="problem_heading"
@@ -67,33 +70,8 @@ const ProblemPage: SFC<IProblemPage> = ({ addProblem }) => {
           <SubmitButton />
         </ButtonsContainer>
       </StyledForm>
-    </StyledWrapper>
+    </Wrapper>
   )
 }
-
-const StyledWrapper = styled(Wrapper)`
-  padding: 30px 0;
-`
-
-const ButtonsContainer = styled.div`
-  display: flex;
-  justify-content: space-around;
-
-  width: 100%;
-`
-
-const StyledForm = styled.form`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-direction: column;
-
-  width: 100%;
-
-  padding: 30px;
-
-  border: 2px solid #a598b9;
-  border-radius: 30px;
-`
 
 export default compose(connect(null, { addProblem }))(memo(ProblemPage))

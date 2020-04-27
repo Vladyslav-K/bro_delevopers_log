@@ -1,28 +1,38 @@
 import React, { SFC, memo } from 'react'
-import styled from 'styled-components'
 import { useForm } from 'react-hook-form'
+import { connect } from 'react-redux'
+import { compose } from 'redux'
+
+// add error action
+import { addError } from '../../utils/Api'
+
+// error interface
+import { IError } from '../../store/errorsModule'
 
 // styled components
 import Input from '../../components/Input'
 import Wrapper from '../../layouts/Wrapper'
+import StyledForm from '../../layouts/Form'
 import TextArea from '../../components/TextArea'
 import SubmitButton from '../../components/SubmitButton'
 import MainPageButton from '../../components/MainPageButton'
+import ButtonsContainer from '../../layouts/ButtonsContainer'
 
-type FormData = {
-  error_heading: string
-  error_description: string
-  error_solution: string
+interface IErrorPage {
+  addError: (data: IError) => void
 }
 
-const ErrorPage: SFC = () => {
-  const { register, handleSubmit, errors } = useForm<FormData>()
+const ErrorPage: SFC<IErrorPage> = ({ addError }) => {
+  const { register, handleSubmit, errors, reset } = useForm<IError>()
+
   const onSubmit = handleSubmit((props) => {
-    console.log(props)
+    const data: IError = { ...props, createdAt: new Date() }
+    addError(data)
+    reset()
   })
 
   return (
-    <StyledWrapper>
+    <Wrapper>
       <StyledForm onSubmit={onSubmit}>
         <Input
           name="error_heading"
@@ -60,33 +70,8 @@ const ErrorPage: SFC = () => {
           <SubmitButton />
         </ButtonsContainer>
       </StyledForm>
-    </StyledWrapper>
+    </Wrapper>
   )
 }
 
-const StyledWrapper = styled(Wrapper)`
-  padding: 30px 0;
-`
-
-const ButtonsContainer = styled.div`
-  display: flex;
-  justify-content: space-around;
-
-  width: 100%;
-`
-
-const StyledForm = styled.form`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-direction: column;
-
-  width: 100%;
-
-  padding: 30px;
-
-  border: 2px solid #a598b9;
-  border-radius: 30px;
-`
-
-export default memo(ErrorPage)
+export default compose(connect(null, { addError }))(memo(ErrorPage))

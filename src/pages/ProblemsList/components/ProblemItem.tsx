@@ -16,9 +16,13 @@ const ProblemItem: SFC<IProblemItem> = ({ problem_heading, problem_description, 
     dispatch(push(`/problems/${id}`))
   }
   return (
-    <Container onClick={() => handleClick(id)}>
-      <Heading> {problem_heading} </Heading>
-      <Line />
+    <Container>
+      <HeadingContainer>
+        <Heading> {problem_heading} </Heading>
+
+        <ViewLink onClick={() => handleClick(id)}>View</ViewLink>
+      </HeadingContainer>
+
       <Description> {problem_description} </Description>
     </Container>
   )
@@ -28,29 +32,48 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
 
-  margin: 15px;
-  padding: 10px;
+  width: 100%;
 
-  border: 2px solid #a598b9;
-  border-radius: 10px;
+  margin: 15px 0;
 
-  line-height: 30px;
-  cursor: pointer;
-  color: #625772;
+  line-height: 25px;
 `
 
 const Heading = styled.span`
-  font-size: 35px;
-  margin-bottom: 10px;
+  max-width: 85%;
+`
+
+const ViewLink = styled.span`
+  user-select: none;
+  cursor: pointer;
+  border-bottom: 2px solid white;
+`
+
+const HeadingContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 10px;
+
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+
+  font-size: 20px;
+  color: white;
+
+  background: #444;
 `
 
 const Description = styled.span`
-  font-size: 25px;
-`
+  padding: 10px;
 
-const Line = styled.hr`
-  width: 100%;
-  border-color: #a598b9;
+  border: 2px solid black;
+
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+
+  font-size: 18px;
 `
 
 export default memo(ProblemItem)

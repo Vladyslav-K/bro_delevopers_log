@@ -8,12 +8,11 @@ const SubmitButton: SFC = () => {
 const StyledButton = styled.button`
   min-width: 150px;
 
-  margin-top: 15px;
   padding: 15px;
 
-  background-color: #a598b9;
+  background-color: #444;
 
-  border: 1px solid #a598b9;
+  border: 1px solid #444;
   border-radius: 10px;
   outline: none;
 

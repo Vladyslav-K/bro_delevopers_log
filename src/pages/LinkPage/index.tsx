@@ -1,27 +1,37 @@
 import React, { SFC, memo } from 'react'
-import styled from 'styled-components'
 import { useForm } from 'react-hook-form'
+import { connect } from 'react-redux'
+import { compose } from 'redux'
+
+// add link action
+import { addLink } from '../../utils/Api'
+
+// link intefrace
+import { ILink } from '../../store/linksModule'
 
 // styled components
 import Input from '../../components/Input'
 import Wrapper from '../../layouts/Wrapper'
+import StyledForm from '../../layouts/Form'
 import TextArea from '../../components/TextArea'
 import SubmitButton from '../../components/SubmitButton'
 import MainPageButton from '../../components/MainPageButton'
+import ButtonsContainer from '../../layouts/ButtonsContainer'
 
-type FormData = {
-  link_heading: string
-  link_path: string
+interface ILinkPage {
+  addLink: (data: ILink) => void
 }
 
-const LinkPage: SFC = () => {
-  const { register, handleSubmit, errors } = useForm<FormData>()
+const LinkPage: SFC<ILinkPage> = ({ addLink }) => {
+  const { register, handleSubmit, errors, reset } = useForm<ILink>()
   const onSubmit = handleSubmit((props) => {
-    console.log(props)
+    const data: ILink = { ...props, createdAt: new Date() }
+    addLink(data)
+    reset()
   })
 
   return (
-    <StyledWrapper>
+    <Wrapper>
       <StyledForm onSubmit={onSubmit}>
         <Input
           name="link_path"
@@ -32,11 +42,11 @@ const LinkPage: SFC = () => {
         />
 
         <TextArea
-          name="link_heading"
+          name="link_description"
           label="Description of the link"
           placeholder="Enter here a description of the link"
           ref={register({ required: true })}
-          error={errors.link_heading}
+          error={errors.link_description}
         />
 
         <ButtonsContainer>
@@ -44,33 +54,8 @@ const LinkPage: SFC = () => {
           <SubmitButton />
         </ButtonsContainer>
       </StyledForm>
-    </StyledWrapper>
+    </Wrapper>
   )
 }
 
-const StyledWrapper = styled(Wrapper)`
-  margin-top: 25%;
-`
-
-const ButtonsContainer = styled.div`
-  display: flex;
-  justify-content: space-around;
-
-  width: 100%;
-`
-
-const StyledForm = styled.form`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-direction: column;
-
-  width: 100%;
-
-  padding: 30px;
-
-  border: 2px solid #a598b9;
-  border-radius: 30px;
-`
-
-export default memo(LinkPage)
+export default compose(connect(null, { addLink }))(memo(LinkPage))

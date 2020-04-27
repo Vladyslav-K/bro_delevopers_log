@@ -31,7 +31,7 @@ const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
 
-  width: 100%;
+  width: 80%;
 
   margin: 20px 0;
 `
@@ -39,7 +39,7 @@ const InputContainer = styled.div`
 const StyledInput = styled.input<{ error: FieldError | undefined }>`
   padding: 15px;
 
-  border: ${(props) => (props.error ? '2px solid red' : '2px solid #a598b9')};
+  border: ${(props) => (props.error ? '2px solid red' : '2px solid #444')};
   border-radius: 10px;
   outline: none;
 
