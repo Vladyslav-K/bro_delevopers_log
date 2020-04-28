@@ -62,6 +62,7 @@ export const getCurrentProblemFromDB = createAsyncThunk(
 
         return problemData
       })
+
     return problem
   },
 )
@@ -118,6 +119,7 @@ export const getCurrentErrorFromDB = createAsyncThunk('errors/getCurrentProblemF
 
       return errorData
     })
+
   return error
 })
 
@@ -125,39 +127,38 @@ export const addLink = createAsyncThunk('links/addLink', (arg: ILink) => {
   db.collection('links').add(arg)
 })
 
-export const getLinksFromDB = createAsyncThunk('links/getLinksFromDB', () => {
-  const links: Promise<ILink[]> = db
-    .collection('links')
-    .orderBy('createdAt', 'desc')
+export const getLinksFromDB = createAsyncThunk('links/getLinksFromDB', async (page: number) => {
+  const ref = db.collection('links').orderBy('createdAt', 'desc')
+  const allLinksLength = await ref.get().then((querySnapshot) => querySnapshot.docs.length)
+
+  const links: ILink[] = await ref
+    .limit(page * ITEMS_COUNT_PER_PAGE)
     .get()
     .then((querySnapshot) => {
-      const result: any = []
+      let lastVisible = querySnapshot.docs[page * ITEMS_COUNT_PER_PAGE - ITEMS_COUNT_PER_PAGE]
 
-      querySnapshot.forEach((link) => {
-        const id = link.id
-        const data = link.data()
-        const linkData = { id, ...data }
+      const data = db
+        .collection('links')
+        .orderBy('createdAt', 'desc')
+        .startAt(lastVisible)
+        .limit(ITEMS_COUNT_PER_PAGE)
+        .get()
+        .then((querySnapshot) => {
+          let result: any = []
 
-        result.push(linkData)
-      })
+          querySnapshot.forEach((link) => {
+            const id = link.id
+            const data = link.data()
+            const linkData = { id, ...data }
 
-      return result
+            result.push(linkData)
+          })
+
+          return result
+        })
+
+      return data
     })
 
-  return links
-})
-
-export const getCurrentLinkFromDB = createAsyncThunk('links/getCurrentLinkFromDB', async (linkId: string) => {
-  const link = db
-    .collection('links')
-    .doc(linkId)
-    .get()
-    .then((link) => {
-      const id = link.id
-      const data = link.data()
-      const linkData = { id, ...data }
-
-      return linkData
-    })
-  return link
+  return { links, allLinksLength }
 })
