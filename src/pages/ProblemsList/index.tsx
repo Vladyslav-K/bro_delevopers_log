@@ -1,4 +1,5 @@
-import React, { SFC, memo, useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
+import { RouteComponentProps } from 'react-router-dom'
 import { connect, useDispatch } from 'react-redux'
 import Pagination from 'react-js-pagination'
 import { bindActionCreators } from 'redux'
@@ -17,26 +18,40 @@ import Spinner from '../../components/Spinner'
 // items count per page constant
 import { ITEMS_COUNT_PER_PAGE } from '../../utils/constants'
 
-interface IProblemList {
+// helper functions
+import { getQueryPage } from '../../utils/helpers'
+
+interface IProblemList extends RouteComponentProps {
   problemList: IProblem[]
   allProblemsLength: number
   pending: boolean
 }
 
-const ProblemsList: SFC<IProblemList> = ({ problemList, allProblemsLength, pending }) => {
+const ProblemsList: FC<IProblemList> = ({ problemList, allProblemsLength, pending, history, location }) => {
   const [page, setPage] = useState(1)
 
   const dispatch = useDispatch()
   const getProblems = bindActionCreators(getProblemsFromDB, dispatch)
 
   useEffect(() => {
-    getProblems(page)
+    const queryPage = getQueryPage(location.search)
+
+    if (queryPage) {
+      getProblems(queryPage)
+      setPage(queryPage)
+    } else {
+      getProblems(page)
+    }
+
     // eslint-disable-next-line
   }, [])
 
-  const handlePaginateChange = (page: number) => {
-    getProblems(page)
-    setPage(page)
+  const handlePaginateChange = (currentPage: number) => {
+    setPage(currentPage)
+    getProblems(currentPage)
+    history.push({
+      search: `?page=${currentPage}`,
+    })
   }
 
   return (
@@ -111,4 +126,4 @@ export default connect((state: IState) => ({
   problemList: state.problems.problemList,
   allProblemsLength: state.problems.allProblemsLength,
   pending: state.problems.pending,
-}))(memo(ProblemsList))
+}))(ProblemsList)

@@ -15,9 +15,9 @@ const Header: SFC = () => {
         </LogoContainer>
 
         <StyledAppBar>
-          <Link to="/problems">Problems</Link>
-          <Link to="/errors">Errors</Link>
-          <Link to="/links">Links</Link>
+          <a href="/problems">Problems</a>
+          <a href="/errors">Errors</a>
+          <a href="/links">Links</a>
         </StyledAppBar>
       </HeaderContent>
     </StyledHeader>

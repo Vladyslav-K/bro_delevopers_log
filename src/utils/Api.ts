@@ -14,9 +14,7 @@ export const addProblem = createAsyncThunk('problems/addProblem', (arg: IProblem
 
 export const getProblemsFromDB = createAsyncThunk('problems/getProblemsFromDB', async (page: number) => {
   const ref = db.collection('problems').orderBy('createdAt', 'desc')
-  const allProblemsLength = await ref.get().then((querySnapshot) => {
-    return querySnapshot.docs.length
-  })
+  const allProblemsLength = await ref.get().then((querySnapshot) => querySnapshot.docs.length)
 
   const problems: IProblem[] = await ref
     .limit(page * ITEMS_COUNT_PER_PAGE)
