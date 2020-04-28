@@ -66,30 +66,44 @@ export const getCurrentProblemFromDB = createAsyncThunk(
   },
 )
 
-export const addError = createAsyncThunk('errors/addProblem', (arg: IError) => {
+export const addError = createAsyncThunk('errors/addError', (arg: IError) => {
   db.collection('errors').add(arg)
 })
 
-export const getErrorsFromDB = createAsyncThunk('errors/getErrorsFromDB', () => {
-  const errors: Promise<IError[]> = db
-    .collection('errors')
-    .orderBy('createdAt', 'desc')
+export const getErrorsFromDB = createAsyncThunk('errors/getErrorsFromDB', async (page: number) => {
+  const ref = db.collection('errors').orderBy('createdAt', 'desc')
+  const allErrorsLength = await ref.get().then((querySnapshot) => querySnapshot.docs.length)
+
+  const errors: IError[] = await ref
+    .limit(page * ITEMS_COUNT_PER_PAGE)
     .get()
     .then((querySnapshot) => {
-      const result: any = []
+      let lastVisible = querySnapshot.docs[page * ITEMS_COUNT_PER_PAGE - ITEMS_COUNT_PER_PAGE]
 
-      querySnapshot.forEach((error) => {
-        const id = error.id
-        const data = error.data()
-        const errorData = { id, ...data }
+      const data = db
+        .collection('errors')
+        .orderBy('createdAt', 'desc')
+        .startAt(lastVisible)
+        .limit(ITEMS_COUNT_PER_PAGE)
+        .get()
+        .then((querySnapshot) => {
+          let result: any = []
 
-        result.push(errorData)
-      })
+          querySnapshot.forEach((error) => {
+            const id = error.id
+            const data = error.data()
+            const errorData = { id, ...data }
 
-      return result
+            result.push(errorData)
+          })
+
+          return result
+        })
+
+      return data
     })
 
-  return errors
+  return { errors, allErrorsLength }
 })
 
 export const getCurrentErrorFromDB = createAsyncThunk('errors/getCurrentProblemFromDB', async (errorId: string) => {

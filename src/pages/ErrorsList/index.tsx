@@ -5,14 +5,14 @@ import Pagination from 'react-js-pagination'
 import { bindActionCreators } from 'redux'
 import styled from 'styled-components'
 
-// problem item interface
-import { IProblem } from '../../store/problemsModule'
+// error item interface
+import { IError } from '../../store/errorsModule'
 
-// get problems action
-import { getProblemsFromDB } from '../../utils/Api'
+// get errors action
+import { getErrorsFromDB } from '../../utils/Api'
 
 // styled components
-import ProblemItem from './components/ProblemItem'
+import Error from './components/ErrorItem'
 import Spinner from '../../components/Spinner'
 
 // items count per page constant
@@ -21,26 +21,26 @@ import { ITEMS_COUNT_PER_PAGE } from '../../utils/constants'
 // helper functions
 import { getQueryPage } from '../../utils/helpers'
 
-interface IProblemList extends RouteComponentProps {
-  problemList: IProblem[]
-  allProblemsLength: number
+interface IErrorList extends RouteComponentProps {
+  errorList: IError[]
+  allErrorsLength: number
   pending: boolean
 }
 
-const ProblemsList: FC<IProblemList> = ({ problemList, allProblemsLength, pending, history, location }) => {
+const ErrorsList: FC<IErrorList> = ({ errorList, allErrorsLength, pending, history, location }) => {
   const [page, setPage] = useState(1)
 
   const dispatch = useDispatch()
-  const getProblems = bindActionCreators(getProblemsFromDB, dispatch)
+  const getErrors = bindActionCreators(getErrorsFromDB, dispatch)
 
   useEffect(() => {
     const queryPage = getQueryPage(location.search)
 
     if (queryPage) {
-      getProblems(queryPage)
+      getErrors(queryPage)
       setPage(queryPage)
     } else {
-      getProblems(page)
+      getErrors(page)
     }
 
     // eslint-disable-next-line
@@ -48,7 +48,7 @@ const ProblemsList: FC<IProblemList> = ({ problemList, allProblemsLength, pendin
 
   const handlePaginateChange = (currentPage: number) => {
     setPage(currentPage)
-    getProblems(currentPage)
+    getErrors(currentPage)
 
     history.push({
       search: `?page=${currentPage}`,
@@ -57,26 +57,26 @@ const ProblemsList: FC<IProblemList> = ({ problemList, allProblemsLength, pendin
 
   return (
     <Container>
-      <Heading>Problems</Heading>
+      <Heading>Errors</Heading>
 
       {pending ? (
         <Spinner />
       ) : (
         <StyledList>
-          {problemList.map((item, index) => {
+          {errorList.map((item, index) => {
             return (
-              <ProblemItem
+              <Error
                 key={index}
                 id={item.id}
-                problem_heading={item.problem_heading}
-                problem_description={item.problem_description}
+                error_heading={item.error_heading}
+                error_description={item.error_description}
               />
             )
           })}
         </StyledList>
       )}
 
-      {allProblemsLength > 5 && (
+      {allErrorsLength > 5 && (
         <Pagination
           prevPageText="prev"
           nextPageText="next"
@@ -84,7 +84,7 @@ const ProblemsList: FC<IProblemList> = ({ problemList, allProblemsLength, pendin
           lastPageText="last"
           activePage={page}
           itemsCountPerPage={ITEMS_COUNT_PER_PAGE}
-          totalItemsCount={allProblemsLength}
+          totalItemsCount={allErrorsLength}
           onChange={handlePaginateChange}
         />
       )}
@@ -120,15 +120,15 @@ const Heading = styled.span`
 `
 
 interface IState {
-  problems: {
-    problemList: IProblem[]
-    allProblemsLength: number
+  errors: {
+    errorList: IError[]
+    allErrorsLength: number
     pending: boolean
   }
 }
 
 export default connect((state: IState) => ({
-  problemList: state.problems.problemList,
-  allProblemsLength: state.problems.allProblemsLength,
-  pending: state.problems.pending,
-}))(ProblemsList)
+  errorList: state.errors.errorList,
+  allErrorsLength: state.errors.allErrorsLength,
+  pending: state.errors.pending,
+}))(ErrorsList)
